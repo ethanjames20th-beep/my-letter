@@ -1,19 +1,1079 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Letter</title>
 
 <style>
-/* background + envelope styling goes here */
-</style>
 
+/* =========================================================
+   BASIC SETUP
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #000;
+    color: #111;
+}
+
+
+/* =========================================================
+   GRADIENT BACKGROUND
+   ========================================================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: #020204;
+    z-index: 0;
+}
+
+/* Blue middle glow */
+
+.glow-blue {
+    position: absolute;
+
+    width: 80vw;
+    height: 65vw;
+
+    left: 50%;
+    top: 40%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(55, 110, 255, 0.95) 0%,
+            rgba(55, 110, 255, 0.65) 30%,
+            rgba(55, 110, 255, 0) 70%
+        );
+
+    filter: blur(100px);
+
+    animation: blueFloat 12s ease-in-out infinite alternate;
+}
+
+/* Pink glow on left */
+
+.glow-pink-left {
+    position: absolute;
+
+    width: 70vw;
+    height: 60vw;
+
+    left: -15%;
+    bottom: -20%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 50, 220, 0.95) 0%,
+            rgba(255, 30, 180, 0.65) 35%,
+            rgba(255, 0, 140, 0) 72%
+        );
+
+    filter: blur(100px);
+
+    animation: pinkFloat 14s ease-in-out infinite alternate;
+}
+
+/* Pink glow on right */
+
+.glow-pink-right {
+    position: absolute;
+
+    width: 70vw;
+    height: 60vw;
+
+    right: -15%;
+    bottom: -20%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 40, 190, 0.95) 0%,
+            rgba(255, 20, 160, 0.65) 35%,
+            rgba(255, 0, 120, 0) 72%
+        );
+
+    filter: blur(100px);
+
+    animation: pinkFloat 16s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes blueFloat {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    to {
+        transform:
+            translate(-50%, -47%)
+            scale(1.08);
+    }
+}
+
+@keyframes pinkFloat {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
+}
+
+
+/* =========================================================
+   MAIN 3D STAGE
+   ========================================================= */
+
+.stage {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    perspective: 1400px;
+
+    z-index: 5;
+}
+
+
+/* =========================================================
+   ENVELOPE
+   ========================================================= */
+
+.envelope-wrapper {
+
+    position: relative;
+
+    width: min(430px, 75vw);
+
+    aspect-ratio: 1.55 / 1;
+
+    transform-style: preserve-3d;
+
+    cursor: pointer;
+
+    transition:
+        transform 1.2s cubic-bezier(0.22, 0.75, 0.25, 1),
+        opacity 0.8s ease;
+}
+
+
+/* =========================================================
+   ENVELOPE FRONT/BACK
+   ========================================================= */
+
+.envelope-face {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 5px;
+
+    backface-visibility: hidden;
+
+    transform-style: preserve-3d;
+
+    box-shadow:
+        0 35px 80px rgba(0,0,0,0.5),
+        0 10px 25px rgba(0,0,0,0.35);
+}
+
+
+/* =========================================================
+   FRONT OF ENVELOPE
+   ========================================================= */
+
+.envelope-front {
+
+    background:
+        linear-gradient(
+            145deg,
+            #fafafa,
+            #e5e5e5
+        );
+
+    overflow: hidden;
+}
+
+
+/* Envelope diagonal folds */
+
+.envelope-front::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        linear-gradient(
+            32deg,
+            transparent 49.5%,
+            rgba(0,0,0,0.09) 50%,
+            transparent 50.5%
+        ),
+
+        linear-gradient(
+            -32deg,
+            transparent 49.5%,
+            rgba(0,0,0,0.09) 50%,
+            transparent 50.5%
+        );
+}
+
+
+/* =========================================================
+   CUSTOM NAME
+   ========================================================= */
+
+.recipient {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 10;
+
+    color: #151515;
+
+    font-size:
+        clamp(
+            27px,
+            5vw,
+            48px
+        );
+
+    font-weight: normal;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BACK OF ENVELOPE
+   ========================================================= */
+
+.envelope-back {
+
+    background:
+        linear-gradient(
+            145deg,
+            #eeeeee,
+            #dcdcdc
+        );
+
+    transform: rotateY(180deg);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ENVELOPE POCKET
+   ========================================================= */
+
+.pocket-left {
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 75%;
+    height: 75%;
+
+    background: #e4e4e4;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 100%,
+            0 100%
+        );
+
+    z-index: 3;
+}
+
+
+.pocket-right {
+
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    width: 75%;
+    height: 75%;
+
+    background: #dedede;
+
+    clip-path:
+        polygon(
+            0 100%,
+            100% 0,
+            100% 100%
+        );
+
+    z-index: 3;
+}
+
+
+/* =========================================================
+   ENVELOPE FLAP
+   ========================================================= */
+
+.flap {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 58%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f7f7f7,
+            #dedede
+        );
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            50% 100%
+        );
+
+    transform-origin: top center;
+
+    transform:
+        rotateX(0deg);
+
+    transition:
+        transform 1s cubic-bezier(
+            0.22,
+            0.75,
+            0.25,
+            1
+        );
+
+    z-index: 10;
+
+    backface-visibility: hidden;
+}
+
+
+/* Flap opens */
+
+.envelope-wrapper.opened .flap {
+
+    transform:
+        rotateX(180deg);
+}
+
+
+/* =========================================================
+   PAPER
+   ========================================================= */
+
+.paper {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: min(520px, 86vw);
+
+    height: min(735px, 80vh);
+
+    transform:
+        translate(-50%, 20%)
+        scale(0.82);
+
+    opacity: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    overflow-y: auto;
+
+    background-color: #fffefb;
+
+    /*
+       A4 ruled-paper lines
+    */
+
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+
+            transparent 0px,
+
+            transparent 30px,
+
+            rgba(
+                90,
+                130,
+                180,
+                0.25
+            ) 31px,
+
+            transparent 32px
+        );
+
+    border-radius: 2px;
+
+    box-shadow:
+        0 35px 90px rgba(0,0,0,0.55),
+        0 10px 30px rgba(0,0,0,0.3);
+
+    transition:
+
+        transform
+            1.4s
+            cubic-bezier(
+                0.16,
+                1,
+                0.3,
+                1
+            ),
+
+        opacity
+            0.6s
+            ease;
+
+    scrollbar-width: thin;
+}
+
+
+/* Red margin line */
+
+.paper::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 45px;
+
+    width: 1px;
+
+    background:
+        rgba(
+            220,
+            70,
+            70,
+            0.25
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   PAPER SLIDES OUT
+   ========================================================= */
+
+.stage.paper-out .paper {
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+    z-index: 20;
+}
+
+
+/* Envelope moves away */
+
+.stage.paper-out .envelope-wrapper {
+
+    transform:
+        translateY(300px)
+        scale(0.85);
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LETTER CONTENT
+   ========================================================= */
+
+.paper-content {
+
+    min-height: 100%;
+
+    padding:
+        60px
+        55px
+        110px
+        75px;
+
+    font-size: 18px;
+
+    line-height: 32px;
+
+    letter-spacing: 0.1px;
+}
+
+
+.paper-content h1 {
+
+    margin:
+
+        0
+        0
+        38px;
+
+    font-size: 30px;
+
+    line-height: 1.4;
+
+    font-weight: normal;
+}
+
+
+.paper-content p {
+
+    margin:
+
+        0
+        0
+        24px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .envelope-wrapper {
+
+        width: 78vw;
+    }
+
+
+    .paper {
+
+        width: 90vw;
+
+        height: 78vh;
+    }
+
+
+    .paper-content {
+
+        padding:
+            50px
+            32px
+            90px
+            55px;
+
+        font-size: 16px;
+
+        line-height: 30px;
+    }
+
+
+    .paper::before {
+
+        left: 32px;
+    }
+
+
+    .paper-content h1 {
+
+        font-size: 25px;
+    }
+}
+
+</style>
 </head>
+
 
 <body>
 
-<!-- envelope goes here -->
+
+<!-- =====================================================
+     BACKGROUND
+     ===================================================== -->
+
+<div class="background">
+
+    <div class="glow-blue"></div>
+
+    <div class="glow-pink-left"></div>
+
+    <div class="glow-pink-right"></div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN STAGE
+     ===================================================== -->
+
+<div class="stage" id="stage">
+
+
+    <!-- =================================================
+         THE LETTER
+         ================================================= -->
+
+    <div class="paper" id="paper">
+
+        <div class="paper-content">
+
+
+            <h1>MY LOVEEE,</h1>
+
+
+            <p>
+                Happy 3 months, that's a quarter of a year,
+                13 weeks, or 92 days, ALMOST 1000???
+                Tyla Payne-Findlay, I cannot express the
+                love I have for you.
+            </p>
+
+
+            <p>
+                From the day I started talking to you, to
+                walking you home for the first time after
+                school, to our first kiss, the day we went
+                out together, and got your own flowers, to
+                the convenience store where my card declined
+                and it said potential fraud.
+            </p>
+
+
+            <p>
+                I won't forget that day. I remember that day
+                when I met your mum, say Daron, and then you
+                went to Alexa and Kearia. That day had to be
+                a day that changed my life to the fullest.
+            </p>
+
+
+            <p>
+                To other people, they might view our 3 month
+                milestone as, "Wow, been dating for a long
+                time?" No, baby, to me it's more than that.
+            </p>
+
+
+            <p>
+                It's 3 months of being in a close relationship
+                with the person I've been searching for my
+                whole life. Loving the person who feels like
+                my other half.
+            </p>
+
+
+            <p>
+                From random thoughts from when I was a kid,
+                I always wondered what it would be like to
+                be in a forever lasting relationship.
+            </p>
+
+
+            <p>
+                And you beyond exceeded that thought. I've
+                been treated better than I was expecting.
+            </p>
+
+
+            <p>
+                It takes me a good moment to grasp and
+                appreciate the lady that I get to love for
+                the rest of my life.
+            </p>
+
+
+            <p>
+                The lady who carries the beauty of an angel,
+                your brown eyes that I gaze into as they feel
+                like stars every time I look into them.
+            </p>
+
+
+            <p>
+                Your cute and sweet smile that always fills
+                me up with joy.
+            </p>
+
+
+            <p>
+                Romans 12:10 — Be devoted to one another in
+                love. Honor one another above yourselves.
+            </p>
+
+
+            <p>
+                Healthy partnerships thrive when partners
+                honour and prioritise each other. This verse
+                is so perfect because I see when you honour
+                me, I see when you prioritise me, and it's
+                the best feeling ever baby.
+            </p>
+
+
+            <p>
+                And I wanna link back to yesterday, Tyla.
+                Our conversation, our communication is key
+                importance for us to continue living as a
+                strong couple.
+            </p>
+
+
+            <p>
+                And I wanna let you know that my communication
+                with you will always improve to your standards,
+                and I need you to reassure you any poor
+                communication, any times I hurt your feelings.
+            </p>
+
+
+            <p>
+                You must know and never will I intentionally
+                hurt you like that.
+            </p>
+
+
+            <p>
+                You are my baby, my future wife, my missing
+                piece. I could never come close to hurting
+                the person who completes me the most.
+            </p>
+
+
+            <p>
+                I need you, I need you even when I was writing
+                this, I need you every second. I need you and
+                want you only.
+            </p>
+
+
+            <p>
+                For us, cherish each other with all of our
+                heart, we gotta understand it takes patience
+                and consistency.
+            </p>
+
+
+            <p>
+                And I am forever willing to put that work in
+                for you.
+            </p>
+
+
+            <p>
+                We have hit road blocks before, hard moments,
+                but what is so beautiful that even I get
+                amazed at is we move on from that roadblock
+                and become stronger.
+            </p>
+
+
+            <p>
+                No matter what we go through together, I have
+                faith we can go through anything.
+            </p>
+
+
+            <p>
+                Baby, you share not only just an important
+                part of my life but my life, but my testimony.
+            </p>
+
+
+            <p>
+                God sent you as an opportunity and an option.
+                You were the opportunity to reconnect the Lord
+                and I got to stay blessed in this relationship.
+            </p>
+
+
+            <p>
+                He's put us in, and the option to get that
+                opportunity or continue living the way I was.
+            </p>
+
+
+            <p>
+                And without you I couldn't have achieved so
+                much I have to this day.
+            </p>
+
+
+            <p>
+                You will forever take a place in my heart.
+                I will never forget.
+            </p>
+
+
+            <p>
+                I love you with all my heart, you mean the
+                world to me and I'm so crazy about you.
+            </p>
+
+
+            <p>
+                You make me the happiest person.
+            </p>
+
+
+            <p>
+                I love you &lt;3
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ENVELOPE
+         ================================================= -->
+
+    <div
+        class="envelope-wrapper"
+        id="envelope"
+    >
+
+
+        <!-- FRONT OF ENVELOPE -->
+
+        <div
+            class="envelope-face envelope-front"
+        >
+
+            <div
+                class="recipient"
+                id="recipient"
+            >
+                Tyla
+            </div>
+
+        </div>
+
+
+        <!-- BACK OF ENVELOPE -->
+
+        <div
+            class="envelope-face envelope-back"
+        >
+
+            <!-- Opening flap -->
+
+            <div class="flap"></div>
+
+
+            <!-- Envelope pocket -->
+
+            <div class="pocket-left"></div>
+
+            <div class="pocket-right"></div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
 
 <script>
-// clicking + animations go here
+
+/* =========================================================
+   CUSTOMISE THE NAME HERE
+   ========================================================= */
+
+/*
+   Change this whenever you want.
+
+   Example:
+
+   const recipientName = "Tyla";
+
+*/
+
+const recipientName = "Tyla";
+
+
+/* =========================================================
+   GET ELEMENTS
+   ========================================================= */
+
+const envelope =
+    document.getElementById("envelope");
+
+const stage =
+    document.getElementById("stage");
+
+const recipient =
+    document.getElementById("recipient");
+
+
+/* =========================================================
+   PUT NAME ON ENVELOPE
+   ========================================================= */
+
+recipient.textContent =
+    recipientName;
+
+
+/* =========================================================
+   ENVELOPE STATES
+   ========================================================= */
+
+/*
+   closed
+      ↓
+   first click
+      ↓
+   rotated
+      ↓
+   second click
+      ↓
+   opening
+      ↓
+   reading
+*/
+
+let state = "closed";
+
+
+/* =========================================================
+   CLICK ENVELOPE
+   ========================================================= */
+
+envelope.addEventListener(
+    "click",
+    function() {
+
+
+        /* -----------------------------------------------
+           FIRST CLICK
+           Rotate envelope
+           ----------------------------------------------- */
+
+        if (state === "closed") {
+
+            envelope.classList.add(
+                "rotated"
+            );
+
+            state = "rotated";
+
+            return;
+        }
+
+
+        /* -----------------------------------------------
+           SECOND CLICK
+           Open envelope
+           ----------------------------------------------- */
+
+        if (state === "rotated") {
+
+            envelope.classList.add(
+                "opened"
+            );
+
+            state = "opening";
+
+
+            /*
+               Wait a moment for the flap to start opening,
+               then bring the paper out.
+            */
+
+            setTimeout(
+                function() {
+
+                    stage.classList.add(
+                        "paper-out"
+                    );
+
+                    state = "reading";
+
+                },
+                650
+            );
+
+        }
+
+    }
+);
+
 </script>
 
 </body>
