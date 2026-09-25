@@ -9,7 +9,7 @@
 <style>
 
 /* =========================================================
-   BASIC SETUP
+   RESET
    ========================================================= */
 
 * {
@@ -21,38 +21,52 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-    overflow: hidden;
 }
 
 body {
+    overflow: hidden;
+    background: #ffb7df;
     font-family: Georgia, "Times New Roman", serif;
-    background: #000;
-    color: #111;
 }
 
 
 /* =========================================================
-   GRADIENT BACKGROUND
+   FIXED GRADIENT BACKGROUND
    ========================================================= */
 
 .background {
     position: fixed;
     inset: 0;
     overflow: hidden;
-    background: #020204;
     z-index: 0;
+
+    /*
+       Pink replaces the white from your reference.
+    */
+
+    background:
+        radial-gradient(
+            ellipse at 50% 48%,
+            #4d7fff 0%,
+            #5886ff 15%,
+            #8b7cff 29%,
+            #e776e8 48%,
+            #ff6acb 66%,
+            #ff2385 100%
+        );
 }
 
-/* Blue middle glow */
 
-.glow-blue {
+/* Large blue centre */
+
+.blue-light {
     position: absolute;
 
-    width: 80vw;
+    width: 95vw;
     height: 65vw;
 
     left: 50%;
-    top: 40%;
+    top: 37%;
 
     transform: translate(-50%, -50%);
 
@@ -60,102 +74,99 @@ body {
 
     background:
         radial-gradient(
-            circle,
-            rgba(55, 110, 255, 0.95) 0%,
-            rgba(55, 110, 255, 0.65) 30%,
-            rgba(55, 110, 255, 0) 70%
+            ellipse,
+            rgba(63, 119, 255, 1) 0%,
+            rgba(63, 119, 255, .9) 30%,
+            rgba(90, 110, 255, .45) 55%,
+            rgba(90, 110, 255, 0) 72%
         );
 
-    filter: blur(100px);
-
-    animation: blueFloat 12s ease-in-out infinite alternate;
+    filter: blur(65px);
 }
 
-/* Pink glow on left */
 
-.glow-pink-left {
+/* Pink light across lower left */
+
+.pink-left {
     position: absolute;
 
-    width: 70vw;
-    height: 60vw;
+    width: 75vw;
+    height: 55vw;
 
-    left: -15%;
-    bottom: -20%;
+    left: -18%;
+    bottom: -25%;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
-            circle,
-            rgba(255, 50, 220, 0.95) 0%,
-            rgba(255, 30, 180, 0.65) 35%,
-            rgba(255, 0, 140, 0) 72%
+            ellipse,
+            rgba(255, 91, 213, 1) 0%,
+            rgba(255, 67, 198, .8) 35%,
+            rgba(255, 36, 158, .35) 60%,
+            transparent 75%
         );
 
-    filter: blur(100px);
-
-    animation: pinkFloat 14s ease-in-out infinite alternate;
+    filter: blur(70px);
 }
 
-/* Pink glow on right */
 
-.glow-pink-right {
+/* Pink light across lower right */
+
+.pink-right {
     position: absolute;
 
-    width: 70vw;
-    height: 60vw;
+    width: 75vw;
+    height: 55vw;
 
-    right: -15%;
-    bottom: -20%;
+    right: -18%;
+    bottom: -25%;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
-            circle,
-            rgba(255, 40, 190, 0.95) 0%,
-            rgba(255, 20, 160, 0.65) 35%,
-            rgba(255, 0, 120, 0) 72%
+            ellipse,
+            rgba(255, 91, 213, 1) 0%,
+            rgba(255, 67, 198, .8) 35%,
+            rgba(255, 36, 158, .35) 60%,
+            transparent 75%
         );
 
-    filter: blur(100px);
-
-    animation: pinkFloat 16s ease-in-out infinite alternate-reverse;
+    filter: blur(70px);
 }
 
-@keyframes blueFloat {
 
-    from {
-        transform:
-            translate(-50%, -50%)
-            scale(1);
-    }
+/*
+   A very soft pink glow at the top.
+   This replaces the white area from your screenshot.
+*/
 
-    to {
-        transform:
-            translate(-50%, -47%)
-            scale(1.08);
-    }
-}
+.top-pink {
+    position: absolute;
 
-@keyframes pinkFloat {
+    width: 100%;
+    height: 55%;
 
-    from {
-        transform: scale(1);
-    }
+    top: -20%;
 
-    to {
-        transform: scale(1.1);
-    }
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255, 231, 246, .95) 0%,
+            rgba(255, 190, 227, .75) 35%,
+            rgba(255, 190, 227, 0) 75%
+        );
+
+    filter: blur(55px);
 }
 
 
 /* =========================================================
-   MAIN 3D STAGE
+   MAIN STAGE
    ========================================================= */
 
 .stage {
-
     position: relative;
 
     width: 100%;
@@ -166,39 +177,62 @@ body {
     align-items: center;
     justify-content: center;
 
-    perspective: 1400px;
+    perspective: 1600px;
 
     z-index: 5;
 }
 
 
 /* =========================================================
-   ENVELOPE
+   ENVELOPE SYSTEM
    ========================================================= */
 
-.envelope-wrapper {
+.envelope-container {
 
-    position: relative;
+    position: absolute;
 
-    width: min(430px, 75vw);
+    width: min(460px, 74vw);
+    aspect-ratio: 1.58 / 1;
 
-    aspect-ratio: 1.55 / 1;
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotateY(0deg);
 
     transform-style: preserve-3d;
 
+    transition:
+        transform 1.25s
+        cubic-bezier(.22, .75, .25, 1);
+
     cursor: pointer;
 
-    transition:
-        transform 1.2s cubic-bezier(0.22, 0.75, 0.25, 1),
-        opacity 0.8s ease;
+    z-index: 15;
+}
+
+
+/*
+   FIRST CLICK:
+
+   Front -> Back
+*/
+
+.envelope-container.rotated {
+
+    transform:
+        translate(-50%, -50%)
+        rotateY(180deg);
 }
 
 
 /* =========================================================
-   ENVELOPE FRONT/BACK
+   ENVELOPE FRONT
    ========================================================= */
 
-.envelope-face {
+.envelope-front,
+.envelope-back {
 
     position: absolute;
 
@@ -207,38 +241,39 @@ body {
     width: 100%;
     height: 100%;
 
-    border-radius: 5px;
+    border-radius: 4px;
 
     backface-visibility: hidden;
 
     transform-style: preserve-3d;
 
+    overflow: hidden;
+
     box-shadow:
-        0 35px 80px rgba(0,0,0,0.5),
-        0 10px 25px rgba(0,0,0,0.35);
+        0 40px 90px rgba(0, 0, 0, .38),
+        0 12px 30px rgba(0, 0, 0, .25);
 }
 
 
-/* =========================================================
-   FRONT OF ENVELOPE
-   ========================================================= */
+/* Realistic paper colour */
 
 .envelope-front {
 
     background:
-        linear-gradient(
-            145deg,
-            #fafafa,
-            #e5e5e5
-        );
 
-    overflow: hidden;
+        linear-gradient(
+            135deg,
+            #f7f8fa 0%,
+            #e8eaed 45%,
+            #d9dce0 100%
+        );
 }
 
 
-/* Envelope diagonal folds */
+/* Subtle paper texture */
 
-.envelope-front::before {
+.envelope-front::after,
+.envelope-back::after {
 
     content: "";
 
@@ -246,26 +281,113 @@ body {
 
     inset: 0;
 
+    pointer-events: none;
+
     background:
-
-        linear-gradient(
-            32deg,
-            transparent 49.5%,
-            rgba(0,0,0,0.09) 50%,
-            transparent 50.5%
-        ),
-
-        linear-gradient(
-            -32deg,
-            transparent 49.5%,
-            rgba(0,0,0,0.09) 50%,
-            transparent 50.5%
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,.035) 0px,
+            rgba(255,255,255,.035) 1px,
+            transparent 1px,
+            transparent 4px
         );
+
+    opacity: .7;
 }
 
 
 /* =========================================================
-   CUSTOM NAME
+   FRONT ENVELOPE FOLDS
+   ========================================================= */
+
+.front-left-fold {
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 72%;
+    height: 76%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #e9ebee,
+            #d9dce0
+        );
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 100%,
+            0 100%
+        );
+
+    z-index: 2;
+}
+
+
+.front-right-fold {
+
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    width: 72%;
+    height: 76%;
+
+    background:
+        linear-gradient(
+            215deg,
+            #e9ebee,
+            #d5d8dc
+        );
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            0 100%
+        );
+
+    z-index: 2;
+}
+
+
+/* Bottom centre fold */
+
+.front-bottom-fold {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 72%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0),
+            rgba(190,193,197,.4)
+        );
+
+    clip-path:
+        polygon(
+            0 100%,
+            50% 35%,
+            100% 100%
+        );
+
+    z-index: 3;
+}
+
+
+/* =========================================================
+   NAME ON FRONT
    ========================================================= */
 
 .recipient {
@@ -280,22 +402,29 @@ body {
 
     z-index: 10;
 
-    color: #151515;
+    font-family:
+        "Brush Script MT",
+        "Segoe Script",
+        Georgia,
+        serif;
+
+    font-style: italic;
 
     font-size:
         clamp(
-            27px,
+            34px,
             5vw,
-            48px
+            54px
         );
 
-    font-weight: normal;
-
-    letter-spacing: 1px;
-
-    text-align: center;
+    color: #242424;
 
     white-space: nowrap;
+
+    text-shadow:
+        0 1px 1px rgba(255,255,255,.8);
+
+    letter-spacing: .5px;
 }
 
 
@@ -305,71 +434,19 @@ body {
 
 .envelope-back {
 
+    transform: rotateY(180deg);
+
     background:
         linear-gradient(
             145deg,
-            #eeeeee,
-            #dcdcdc
+            #f1f2f4,
+            #dcdfe3
         );
-
-    transform: rotateY(180deg);
-
-    overflow: hidden;
 }
 
 
 /* =========================================================
-   ENVELOPE POCKET
-   ========================================================= */
-
-.pocket-left {
-
-    position: absolute;
-
-    left: 0;
-    bottom: 0;
-
-    width: 75%;
-    height: 75%;
-
-    background: #e4e4e4;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 100%,
-            0 100%
-        );
-
-    z-index: 3;
-}
-
-
-.pocket-right {
-
-    position: absolute;
-
-    right: 0;
-    bottom: 0;
-
-    width: 75%;
-    height: 75%;
-
-    background: #dedede;
-
-    clip-path:
-        polygon(
-            0 100%,
-            100% 0,
-            100% 100%
-        );
-
-    z-index: 3;
-}
-
-
-/* =========================================================
-   ENVELOPE FLAP
+   BACK FLAP
    ========================================================= */
 
 .flap {
@@ -380,13 +457,14 @@ body {
     top: 0;
 
     width: 100%;
-    height: 58%;
+    height: 62%;
 
     background:
         linear-gradient(
             145deg,
-            #f7f7f7,
-            #dedede
+            #f8f9fa 0%,
+            #e6e8eb 55%,
+            #d8dade 100%
         );
 
     clip-path:
@@ -402,25 +480,94 @@ body {
         rotateX(0deg);
 
     transition:
-        transform 1s cubic-bezier(
-            0.22,
-            0.75,
-            0.25,
-            1
-        );
+        transform 1s
+        cubic-bezier(.2, .75, .25, 1);
 
     z-index: 10;
 
     backface-visibility: hidden;
+
+    box-shadow:
+        0 8px 15px rgba(0,0,0,.08);
 }
 
 
-/* Flap opens */
+/*
+   SECOND CLICK:
 
-.envelope-wrapper.opened .flap {
+   Open flap
+*/
+
+.envelope-container.flap-open .flap {
 
     transform:
         rotateX(180deg);
+}
+
+
+/* =========================================================
+   BACK POCKET
+   ========================================================= */
+
+.back-pocket {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            145deg,
+            #e7e9ec,
+            #d6d9dd
+        );
+
+    clip-path:
+        polygon(
+            0 100%,
+            0 30%,
+            50% 72%,
+            100% 30%,
+            100% 100%
+        );
+
+    z-index: 3;
+}
+
+
+/* Side fold lines */
+
+.back-pocket::before,
+.back-pocket::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 90%;
+
+    bottom: -10%;
+
+    background:
+        rgba(0,0,0,.08);
+}
+
+.back-pocket::before {
+
+    left: 20%;
+
+    transform:
+        rotate(-48deg);
+}
+
+.back-pocket::after {
+
+    right: 20%;
+
+    transform:
+        rotate(48deg);
 }
 
 
@@ -435,72 +582,82 @@ body {
     left: 50%;
     top: 50%;
 
-    width: min(520px, 86vw);
+    /*
+       Wider than before.
+    */
 
-    height: min(735px, 80vh);
+    width:
+        min(
+            610px,
+            88vw
+        );
+
+    height:
+        min(
+            780px,
+            82vh
+        );
 
     transform:
-        translate(-50%, 20%)
-        scale(0.82);
+        translate(-50%, 35%)
+        scale(.82);
 
     opacity: 0;
 
-    z-index: 1;
-
     pointer-events: none;
+
+    z-index: 4;
 
     overflow-y: auto;
 
-    background-color: #fffefb;
+    border-radius: 2px;
 
-    /*
-       A4 ruled-paper lines
-    */
+    background-color: #fffefa;
+
+
+    /* A4 ruled paper */
 
     background-image:
+
         repeating-linear-gradient(
             to bottom,
 
             transparent 0px,
 
-            transparent 30px,
+            transparent 31px,
 
             rgba(
-                90,
-                130,
-                180,
-                0.25
-            ) 31px,
+                78,
+                120,
+                177,
+                .25
+            ) 32px,
 
-            transparent 32px
+            transparent 33px
         );
 
-    border-radius: 2px;
 
     box-shadow:
-        0 35px 90px rgba(0,0,0,0.55),
-        0 10px 30px rgba(0,0,0,0.3);
+
+        0 40px 100px
+        rgba(0,0,0,.45),
+
+        0 12px 30px
+        rgba(0,0,0,.25);
+
 
     transition:
 
-        transform
-            1.4s
-            cubic-bezier(
-                0.16,
-                1,
-                0.3,
-                1
-            ),
+        transform 1.35s
+        cubic-bezier(.16, 1, .3, 1),
 
-        opacity
-            0.6s
-            ease;
-
-    scrollbar-width: thin;
+        opacity .55s ease;
 }
 
 
-/* Red margin line */
+/*
+   Red margin
+*/
 
 .paper::before {
 
@@ -511,27 +668,24 @@ body {
     top: 0;
     bottom: 0;
 
-    left: 45px;
+    left: 52px;
 
     width: 1px;
 
     background:
-        rgba(
-            220,
-            70,
-            70,
-            0.25
-        );
+        rgba(205, 55, 65, .25);
 
     pointer-events: none;
 }
 
 
-/* =========================================================
-   PAPER SLIDES OUT
-   ========================================================= */
+/*
+   THIRD CLICK:
 
-.stage.paper-out .paper {
+   Letter comes out.
+*/
+
+.stage.letter-out .paper {
 
     transform:
         translate(-50%, -50%)
@@ -541,26 +695,34 @@ body {
 
     pointer-events: auto;
 
-    z-index: 20;
+    z-index: 30;
 }
 
 
-/* Envelope moves away */
+/* Envelope disappears downwards */
 
-.stage.paper-out .envelope-wrapper {
+.stage.letter-out .envelope-container {
 
     transform:
-        translateY(300px)
-        scale(0.85);
+        translate(-50%, 110%)
+        scale(.82)
+        rotateY(180deg);
 
     opacity: 0;
 
     pointer-events: none;
+
+    transition:
+
+        transform 1.2s
+        cubic-bezier(.2, .8, .2, 1),
+
+        opacity .8s ease;
 }
 
 
 /* =========================================================
-   LETTER CONTENT
+   LETTER TEXT
    ========================================================= */
 
 .paper-content {
@@ -568,18 +730,36 @@ body {
     min-height: 100%;
 
     padding:
-        60px
-        55px
-        110px
-        75px;
+
+        65px
+        65px
+        120px
+        85px;
+
+
+    /*
+       Italic handwritten/letter feeling.
+    */
+
+    font-family:
+
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-style: italic;
 
     font-size: 18px;
 
-    line-height: 32px;
+    line-height: 33px;
 
-    letter-spacing: 0.1px;
+    letter-spacing: .1px;
+
+    color: #171717;
 }
 
+
+/* Letter heading */
 
 .paper-content h1 {
 
@@ -587,15 +767,25 @@ body {
 
         0
         0
-        38px;
+        42px;
 
-    font-size: 30px;
+    font-family:
 
-    line-height: 1.4;
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-style: italic;
 
     font-weight: normal;
+
+    font-size: 31px;
+
+    line-height: 1.4;
 }
 
+
+/* Paragraph spacing */
 
 .paper-content p {
 
@@ -603,7 +793,30 @@ body {
 
         0
         0
-        24px;
+        25px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.paper::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+.paper::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+.paper::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(0,0,0,.22);
+
+    border-radius: 10px;
 }
 
 
@@ -613,27 +826,28 @@ body {
 
 @media (max-width: 600px) {
 
-    .envelope-wrapper {
+    .envelope-container {
 
-        width: 78vw;
+        width: 82vw;
     }
 
 
     .paper {
 
-        width: 90vw;
+        width: 92vw;
 
-        height: 78vh;
+        height: 80vh;
     }
 
 
     .paper-content {
 
         padding:
-            50px
-            32px
-            90px
-            55px;
+
+            55px
+            38px
+            100px
+            62px;
 
         font-size: 16px;
 
@@ -643,13 +857,13 @@ body {
 
     .paper::before {
 
-        left: 32px;
+        left: 37px;
     }
 
 
     .paper-content h1 {
 
-        font-size: 25px;
+        font-size: 27px;
     }
 }
 
@@ -661,29 +875,31 @@ body {
 
 
 <!-- =====================================================
-     BACKGROUND
+     FIXED BACKGROUND
      ===================================================== -->
 
 <div class="background">
 
-    <div class="glow-blue"></div>
+    <div class="top-pink"></div>
 
-    <div class="glow-pink-left"></div>
+    <div class="blue-light"></div>
 
-    <div class="glow-pink-right"></div>
+    <div class="pink-left"></div>
+
+    <div class="pink-right"></div>
 
 </div>
 
 
 <!-- =====================================================
-     MAIN STAGE
+     MAIN
      ===================================================== -->
 
 <div class="stage" id="stage">
 
 
     <!-- =================================================
-         THE LETTER
+         LETTER PAPER
          ================================================= -->
 
     <div class="paper" id="paper">
@@ -697,8 +913,8 @@ body {
             <p>
                 Happy 3 months, that's a quarter of a year,
                 13 weeks, or 92 days, ALMOST 1000???
-                Tyla Payne-Findlay, I cannot express the
-                love I have for you.
+                Tyla Payne-Findlay, I cannot express the love
+                I have for you.
             </p>
 
 
@@ -737,8 +953,8 @@ body {
 
             <p>
                 From random thoughts from when I was a kid,
-                I always wondered what it would be like to
-                be in a forever lasting relationship.
+                I always wondered what it would be like to be
+                in a forever lasting relationship.
             </p>
 
 
@@ -903,16 +1119,19 @@ body {
          ================================================= -->
 
     <div
-        class="envelope-wrapper"
+        class="envelope-container"
         id="envelope"
     >
 
 
-        <!-- FRONT OF ENVELOPE -->
+        <!-- =============================================
+             FRONT
+             ============================================= -->
 
-        <div
-            class="envelope-face envelope-front"
-        >
+        <div class="envelope-front">
+
+
+            <!-- Name -->
 
             <div
                 class="recipient"
@@ -921,31 +1140,40 @@ body {
                 Tyla
             </div>
 
+
+            <!-- Realistic folds -->
+
+            <div class="front-left-fold"></div>
+
+            <div class="front-right-fold"></div>
+
+            <div class="front-bottom-fold"></div>
+
+
         </div>
 
 
-        <!-- BACK OF ENVELOPE -->
+        <!-- =============================================
+             BACK
+             ============================================= -->
 
-        <div
-            class="envelope-face envelope-back"
-        >
+        <div class="envelope-back">
 
-            <!-- Opening flap -->
+
+            <!-- Top opening flap -->
 
             <div class="flap"></div>
 
 
-            <!-- Envelope pocket -->
+            <!-- Bottom pocket -->
 
-            <div class="pocket-left"></div>
+            <div class="back-pocket"></div>
 
-            <div class="pocket-right"></div>
 
         </div>
 
 
     </div>
-
 
 </div>
 
@@ -953,11 +1181,11 @@ body {
 <script>
 
 /* =========================================================
-   CUSTOMISE THE NAME HERE
+   CUSTOM NAME
    ========================================================= */
 
 /*
-   Change this whenever you want.
+   CHANGE THIS NAME:
 
    Example:
 
@@ -969,7 +1197,7 @@ const recipientName = "Tyla";
 
 
 /* =========================================================
-   GET ELEMENTS
+   ELEMENTS
    ========================================================= */
 
 const envelope =
@@ -982,37 +1210,43 @@ const recipient =
     document.getElementById("recipient");
 
 
-/* =========================================================
-   PUT NAME ON ENVELOPE
-   ========================================================= */
+/* Put name onto front */
 
 recipient.textContent =
     recipientName;
 
 
 /* =========================================================
-   ENVELOPE STATES
+   STATES
    ========================================================= */
 
 /*
-   closed
-      ↓
-   first click
-      ↓
-   rotated
-      ↓
-   second click
-      ↓
-   opening
-      ↓
-   reading
+
+   STATE 1
+   Front
+
+       ↓ click
+
+   STATE 2
+   Back
+
+       ↓ click
+
+   STATE 3
+   Flap open
+
+       ↓ click
+
+   STATE 4
+   Letter out
+
 */
 
-let state = "closed";
+let state = 0;
 
 
 /* =========================================================
-   CLICK ENVELOPE
+   ENVELOPE CLICK
    ========================================================= */
 
 envelope.addEventListener(
@@ -1020,55 +1254,54 @@ envelope.addEventListener(
     function() {
 
 
-        /* -----------------------------------------------
-           FIRST CLICK
-           Rotate envelope
-           ----------------------------------------------- */
+        /* =============================================
+           CLICK 1
+           Rotate to back
+           ============================================= */
 
-        if (state === "closed") {
+        if (state === 0) {
 
             envelope.classList.add(
                 "rotated"
             );
 
-            state = "rotated";
+            state = 1;
 
             return;
         }
 
 
-        /* -----------------------------------------------
-           SECOND CLICK
-           Open envelope
-           ----------------------------------------------- */
+        /* =============================================
+           CLICK 2
+           Open top flap
+           ============================================= */
 
-        if (state === "rotated") {
+        if (state === 1) {
 
             envelope.classList.add(
-                "opened"
+                "flap-open"
             );
 
-            state = "opening";
+            state = 2;
+
+            return;
+        }
 
 
-            /*
-               Wait a moment for the flap to start opening,
-               then bring the paper out.
-            */
+        /* =============================================
+           CLICK 3
+           Pull letter out
+           ============================================= */
 
-            setTimeout(
-                function() {
+        if (state === 2) {
 
-                    stage.classList.add(
-                        "paper-out"
-                    );
-
-                    state = "reading";
-
-                },
-                650
+            stage.classList.add(
+                "letter-out"
             );
 
+            state = 3;
+
+            return;
         }
 
     }
